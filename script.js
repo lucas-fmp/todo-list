@@ -33,3 +33,26 @@ buttonAdd.addEventListener('click', () => {
     });
   }
 });
+
+// Botão de apagar tudo
+const buttonClear = document.querySelector('#apaga-tudo');
+
+buttonClear.addEventListener('click', () => {
+  while (ol.hasChildNodes()) {
+    ol.removeChild(ol.firstChild);
+  }
+});
+
+// Botão de remover finalizados
+const buttonClearCompleted = document.querySelector('#remover-finalizados');
+
+buttonClearCompleted.addEventListener('click', () => {
+  for (let i = 0; i < ol.childNodes.length; i += 1) {
+    const listaDeClasses1 = ol.childNodes[i];
+    const compare1 = listaDeClasses1.classList.contains('completed');
+    if (compare1 === true) {
+      ol.removeChild(ol.childNodes[i]);
+      i = 0;
+    }
+  }
+});
