@@ -17,7 +17,7 @@ buttonAdd.addEventListener('click', () => {
   li.classList.add('tarefa');
   ol.appendChild(li);
   inputTask.value = '';
-  // Selecionando as tarefas
+  // Selecionando as tarefas ============================
   for (let i = 0; i < ol.childNodes.length; i += 1) {
     ol.childNodes[i].addEventListener('click', changeColor);
   }
@@ -27,8 +27,9 @@ buttonAdd.addEventListener('click', () => {
     }
     event.target.classList.add('active');
   }
+  // ====================================================
 
-  // Marcando as tarefas como concluídas
+  // Marcando as tarefas como concluídas ================
   for (let i = 0; i < ol.childNodes.length; i += 1) {
     let activated = true;
     ol.childNodes[i].addEventListener('dblclick', (event) => {
@@ -36,9 +37,11 @@ buttonAdd.addEventListener('click', () => {
       activated = !activated;
     });
   }
+  // ====================================================
 });
+// =====================================================
 
-// Botão de apagar tudo
+// Botão de apagar tudo ================================
 const buttonClear = document.querySelector('#apaga-tudo');
 
 buttonClear.addEventListener('click', () => {
@@ -46,8 +49,9 @@ buttonClear.addEventListener('click', () => {
     ol.removeChild(ol.firstChild);
   }
 });
+// ======================================================
 
-// Botão de remover finalizados
+// Botão de remover finalizados =========================
 const buttonClearCompleted = document.querySelector('#remover-finalizados');
 
 buttonClearCompleted.addEventListener('click', () => {
@@ -60,8 +64,9 @@ buttonClearCompleted.addEventListener('click', () => {
     }
   }
 });
+// ======================================================
 
-// Botão de salvar a lista
+// Botão de salvar a lista ==============================
 const buttonSaveList = document.querySelector('#salvar-tarefas');
 const arrayClass = [];
 const arrayText = [];
@@ -73,8 +78,9 @@ buttonSaveList.addEventListener('click', () => {
   localStorage.setItem('class', JSON.stringify(arrayClass));
   localStorage.setItem('text', JSON.stringify(arrayText));
 });
+// ======================================================
 
-// Renderização inicial
+// Renderização inicial =================================
 function initialRenderization() {
   if (localStorage.getItem('class') === null && localStorage.getItem('text') === null) {
     localStorage.setItem('class', JSON.stringify([]));
@@ -111,15 +117,63 @@ function initialRenderization() {
     }
   }
 }
+// ======================================================
 
-// Botão de mover pra cima
+// Botão de mover pra cima ==============================
 const buttonUp = document.querySelector('#mover-cima');
 buttonUp.addEventListener('click', () => {
   const selected = ol.childNodes;
-  console.log(selected[0]);
+  for (let index = 1; index < ol.childNodes.length; index += 1) {
+    let selectedClassList = JSON.stringify(selected[index].classList);
+    if (selectedClassList.includes('active') === true) {
+      let text1 = selected[index].innerText;
+      let text2 = selected[index - 1].innerText;
+      let class1 = selected[index].className;
+      let class2 = selected[index - 1].className;
+      selected[index].previousSibling.innerText = text1;
+      selected[index].previousSibling.className = class1;
+      selected[index].innerText = text2;
+      selected[index].className = class2;
+      console.log(selected[index]);
+    }
+  }
 });
+// ======================================================
 
-// Botão de mover pra baixo
+// Botão de mover pra baixo =============================
+const buttonDown = document.querySelector('#mover-baixo');
+buttonDown.addEventListener('click', () => {
+  const selected = ol.childNodes;
+  for (let index = 0; index < ol.childNodes.length - 1; index += 1) {
+    let selectedClassList = JSON.stringify(selected[index].classList);
+    if (selectedClassList.includes('active') === true) {
+      let text1 = selected[index].innerText;
+      let text2 = selected[index].nextSibling.innerText;
+      let class1 = selected[index].className;
+      let class2 = selected[index].nextSibling.className;
+      selected[index].nextSibling.innerText = text1;
+      selected[index].nextSibling.className = class1;
+      selected[index].innerText = text2;
+      selected[index].className = class2;
+      break;
+    }
+  }
+});
+// ======================================================
+
+// Botão de apagar selecionado ==========================
+const buttonClearSelected = document.querySelector('#remover-selecionado');
+
+buttonClearSelected.addEventListener('click', () => {
+  const selected = ol.childNodes;
+  for (let index = 0; index < ol.childNodes.length; index += 1) {
+    let className = JSON.stringify(selected[index].className);
+    if (className.includes('active')) {
+      ol.removeChild(selected[index]);
+    }
+  }
+})
+// ======================================================
 
 window.onload = function () {
   initialRenderization();
